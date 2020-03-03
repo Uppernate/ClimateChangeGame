@@ -7,6 +7,7 @@
 #include "Components/InstancedStaticMeshComponent.h"
 #include "Engine/DataTable.h"
 #include "TileLibrary.h"
+#include "InstancedTilesComponent.h"
 #include "WorldTiles.generated.h"
 
 UCLASS()
@@ -20,7 +21,7 @@ public:
 	UPROPERTY()
 		TMap<FString, int32> TypeToId;
 	UPROPERTY()
-		TArray<UInstancedStaticMeshComponent*> TileInstances;
+		TArray<UInstancedTilesComponent*> TileInstances;
 	UPROPERTY()
 		TMap<FIntVector, FTile> TileMap;
 	UPROPERTY()
@@ -39,4 +40,6 @@ public:
 		bool RemoveTileFromPosition(FIntVector Position);
 	UFUNCTION(BlueprintCallable)
 		void RenderTiles();
+	UFUNCTION(BlueprintCallable)
+		bool GetInstancedTile(UInstancedTilesComponent* TilesComponent, int32 Index, FString& TileType, FTransform& TileTransform);
 };

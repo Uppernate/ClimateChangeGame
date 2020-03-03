@@ -101,7 +101,7 @@ void AWorldTiles::RenderTiles()
 	{
 		FTile Tile = Elem.Value;
 		int32* InstanceExists = TypeToId.Find(Tile.Name);
-		UInstancedStaticMeshComponent* MeshInstance = nullptr;
+		UInstancedTilesComponent* MeshInstance = nullptr;
 		if (InstanceExists)
 		{
 			MeshInstance = TileInstances[*InstanceExists];
@@ -113,18 +113,34 @@ void AWorldTiles::RenderTiles()
 			FTileData* TileType = TileTypes->FindRow<FTileData>(FName(*Tile.Name), ContextString, true);
 			if (TileType)
 			{
-				UInstancedStaticMeshComponent* NewMeshInstance = NewObject<UInstancedStaticMeshComponent>(this);
+				UInstancedTilesComponent* NewMeshInstance = NewObject<UInstancedTilesComponent>(this);
 				NewMeshInstance->RegisterComponent();
 				NewMeshInstance->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 				NewMeshInstance->SetRelativeTransform(FTransform());
 				NewMeshInstance->SetStaticMesh(TileType->Mesh);
-				NewMeshInstance->SetMaterial(0, TileType->Material);
+				//NewMeshInstance->SetMaterial(0, TileType->Material);
+				NewMeshInstance->CreateDynamicMaterialInstance(0, TileType->Material);
 				TypeToId.Add(Tile.Name, TileInstances.Add(NewMeshInstance));
 				MeshInstance = NewMeshInstance;
 			}
 		}
 		if (!MeshInstance) continue;
-		Tile.InstanceId = MeshInstance->AddInstance(FTransform(UGridLibrary::TileIndexToWorldPosition(Elem.Key) + FVector(0, 0, 1) * Tile.CurrentHeight));
+		//Tile.InstanceId = MeshInstance->AddInstance(FTransform(UGridLibrary::TileIndexToWorldPosition(Elem.Key) + FVector(0, 0, 1) * Tile.CurrentHeight));
+		Tile.InstanceId = MeshInstance->AddTile(Elem.Key, Tile.CurrentHeight);
 	}
+}
+
+bool AWorldTiles::GetInstancedTile(UInstancedTilesComponent* TilesComponent, int32 Index, FString& TileType,
+	FTransform& TileTransform)
+{
+	for (auto& Elem : TypeToId)
+	{
+		if (TilesComponent == TileInstances[Elem.Value])
+		{
+			TileType = Elem.Key;
+			return TilesComponent->GetInstanceTransform(Index, TileTransform, true);
+		}
+	}
+	return false;
 }
 

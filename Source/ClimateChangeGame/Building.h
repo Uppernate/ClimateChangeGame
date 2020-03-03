@@ -4,24 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Engine/DataTable.h"
-#include "LevelController.h"
-#include "WorldGenerator.generated.h"
+#include "Building.generated.h"
 
 UCLASS()
-class CLIMATECHANGEGAME_API AWorldGenerator : public AActor
+class CLIMATECHANGEGAME_API ABuilding : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AWorldGenerator();
-	UPROPERTY()
-		UDataTable* TileTypes;
-	UPROPERTY()
-		ALevelController* Controller;
-	UPROPERTY()
-		int32 MaxSize = 32;
+	ABuilding();
 
 protected:
 	// Called when the game starts or when spawned
@@ -30,7 +22,5 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-		void GenerateWorld();
-		void GenerateWorld_Implementation();
+
 };

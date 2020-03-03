@@ -16,6 +16,8 @@ struct FTileData : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UStaticMesh* Mesh;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UMaterialInterface* Material;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		float BaseHeight;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		float BaseHeightVariance;

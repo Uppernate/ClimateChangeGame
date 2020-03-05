@@ -4,7 +4,7 @@
 #include "LevelController.h"
 #include "GridLibrary.h"
 
-bool ALevelController::GetTileCoordinateCurrentlyHovered(FIntVector& TileCoordinate)
+bool ALevelController::GetTileCoordinateCurrentlyHovered(FIntVector& TileCoordinate, float& Height)
 {
 	FHitResult Res;
 	GetHitResultUnderCursorByChannel(ETraceTypeQuery::TraceTypeQuery3, true, Res);
@@ -16,6 +16,7 @@ bool ALevelController::GetTileCoordinateCurrentlyHovered(FIntVector& TileCoordin
 			FTransform TileHit;
 			bool Success = Tiles->GetInstanceTransform(Res.Item, TileHit, true);
 			TileCoordinate = UGridLibrary::PositionToNearestIndex(TileHit.GetLocation());
+			Height = TileHit.GetLocation().Z;
 			return Success;
 		}
 	}

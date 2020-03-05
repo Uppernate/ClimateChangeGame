@@ -10,7 +10,7 @@
 #include "InstancedTilesComponent.h"
 #include "WorldTiles.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class CLIMATECHANGEGAME_API AWorldTiles : public AActor
 {
 	GENERATED_BODY()

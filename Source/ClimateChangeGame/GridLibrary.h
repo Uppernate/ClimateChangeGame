@@ -14,8 +14,8 @@ class CLIMATECHANGEGAME_API UGridLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 public:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		static FVector TileIndexToWorldPosition(FIntVector TileIndex);
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		static FIntVector PositionToNearestIndex(FVector Position);
 };

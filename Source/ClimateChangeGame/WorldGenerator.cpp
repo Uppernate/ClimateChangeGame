@@ -136,6 +136,16 @@ void AWorldGenerator::GenerateWorld_Implementation()
 			Elem.Value.CurrentHeight = FMath::Lerp(Elem.Value.CurrentHeight, Average, 0.1);
 		}
 	}
+
+	// Setting sand
+
+	for (auto& Elem : Controller->WorldTiles->TileMap)
+	{
+		if (Elem.Value.CurrentHeight <= -300.0f)
+		{
+			Elem.Value.Name = FString(TEXT("sand"));
+		}
+	}
 	
 	Controller->WorldTiles->RenderTiles();
 }

@@ -8,6 +8,8 @@
 #include "Engine/StaticMesh.h"
 #include "TileLibrary.generated.h"
 
+class ABuilding;
+
 USTRUCT(BlueprintType)
 struct FTileData : public FTableRowBase
 {
@@ -34,6 +36,8 @@ struct FTile
 		float CurrentHeight;
 	UPROPERTY()
 		int32 InstanceId;
+	UPROPERTY()
+		ABuilding* Building;
 };
 
 /**

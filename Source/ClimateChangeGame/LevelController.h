@@ -26,7 +26,6 @@ public:
 		AWorldGenerator* Generator;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TMap<ERate, float> Rates;
-	void BeginPlay() override;
 	UFUNCTION(BlueprintCallable)
 		bool GetTileCoordinateCurrentlyHovered(FIntVector& TileCoordinate);
 };

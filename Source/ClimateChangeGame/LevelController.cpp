@@ -4,11 +4,6 @@
 #include "LevelController.h"
 #include "GridLibrary.h"
 
-void ALevelController::BeginPlay()
-{
-	
-}
-
 bool ALevelController::GetTileCoordinateCurrentlyHovered(FIntVector& TileCoordinate)
 {
 	FHitResult Res;

@@ -37,7 +37,7 @@ struct FTile
 	UPROPERTY()
 		int32 InstanceId;
 	UPROPERTY()
-		ABuilding* Building;
+		ABuilding* Building = nullptr;
 };
 
 /**

@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Engine/DataTable.h"
 #include "Engine/StaticMesh.h"
+#include "Curves/CurveVector.h"
 #include "BuildingLibrary.generated.h"
 
 UENUM(BlueprintType)
@@ -18,7 +19,7 @@ enum class ERate : uint8
 };
 
 USTRUCT(BlueprintType)
-struct FBuildingData : public FTableRowBase
+struct FBuildingVariation
 {
 	GENERATED_BODY()
 
@@ -26,8 +27,29 @@ struct FBuildingData : public FTableRowBase
 		UStaticMesh* Mesh;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TArray<UMaterialInterface*> Materials;
+};
+
+USTRUCT(BlueprintType)
+struct FBuildingData : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TArray<FBuildingVariation> Variations;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TMap<ERate, float> Rates;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		int32 InstanceCount = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FVector4 DistributionRandomness;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UCurveFloat* VariantDistribution;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UCurveVector* LocationDistribution;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UCurveVector* RotationDistribution;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UCurveVector* ScaleDistribution;
 };
 
 /**
@@ -37,5 +59,7 @@ UCLASS()
 class CLIMATECHANGEGAME_API UBuildingLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
-	
+public:
+	UFUNCTION()
+		static float DistributionToCurveRange(float Distribution, UCurveBase* Curve);
 };

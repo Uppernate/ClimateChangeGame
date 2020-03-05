@@ -19,11 +19,11 @@ public:
 	ABuilding();
 	
 	UPROPERTY()
-		UInstancedStaticMeshComponent* MeshComponent;
+		TArray<UInstancedStaticMeshComponent*> InstancedMeshes;
 	UPROPERTY()
 		UDataTable* BuildingTypes;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FString Name;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TMap<ERate, float> Rates;

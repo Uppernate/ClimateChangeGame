@@ -14,7 +14,8 @@ ABuilding::ABuilding()
 	PrimaryActorTick.bCanEverTick = true;
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	MeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("Mesh"));
-	LoadAsset<UDataTable>(TEXT("DataTable'/Game/DataTables/DT_TileTypes.DT_TileTypes'"), BuildingTypes);
+	MeshComponent->SetupAttachment(RootComponent);
+	LoadAsset<UDataTable>(TEXT("DataTable'/Game/DataTables/DT_BuildingTypes.DT_BuildingTypes'"), BuildingTypes);
 }
 
 // Called when the game starts or when spawned

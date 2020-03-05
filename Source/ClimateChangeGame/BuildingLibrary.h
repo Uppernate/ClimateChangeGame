@@ -8,6 +8,15 @@
 #include "Engine/StaticMesh.h"
 #include "BuildingLibrary.generated.h"
 
+UENUM(BlueprintType)
+enum class ERate : uint8
+{
+	VE_Water UMETA(DisplayName = "Water"),
+	VE_Heat UMETA(DisplayName = "Heat"),
+	VE_Pollution UMETA(DisplayName = "Pollution"),
+	VE_Energy UMETA(DisplayName = "Energy"),
+};
+
 USTRUCT(BlueprintType)
 struct FBuildingData : public FTableRowBase
 {
@@ -17,15 +26,8 @@ struct FBuildingData : public FTableRowBase
 		UStaticMesh* Mesh;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TArray<UMaterialInterface*> Materials;
-};
-
-UENUM(BlueprintType)
-enum class ERate : uint8
-{
-	VE_Water UMETA(DisplayName = "Water"),
-	VE_Heat UMETA(DisplayName = "Heat"),
-	VE_Pollution UMETA(DisplayName = "Pollution"),
-	VE_Energy UMETA(DisplayName = "Energy"),
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TMap<ERate, float> Rates;
 };
 
 /**

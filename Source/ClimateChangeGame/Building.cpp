@@ -95,7 +95,7 @@ bool ABuilding::AttachToPosition(FIntVector Coordinates)
 		if (Controller)
 		{
 			FTile* Tile = Controller->WorldTiles->TileMap.Find(Coordinates);
-			if (Tile)
+			if (Tile && !Tile->Building)
 			{
 				Tile->Building = this;
 				SetActorLocation(UGridLibrary::TileIndexToWorldPosition(Coordinates) + FVector(0, 0, Tile->CurrentHeight));

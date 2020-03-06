@@ -18,13 +18,13 @@ class CLIMATECHANGEGAME_API AWorldTiles : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AWorldTiles();
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 		TMap<FString, int32> TypeToId;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 		TArray<UInstancedTilesComponent*> TileInstances;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 		TMap<FIntVector, FTile> TileMap;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 		UDataTable* TileTypes;
 
 protected:

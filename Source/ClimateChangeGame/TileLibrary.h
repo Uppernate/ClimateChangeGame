@@ -36,7 +36,7 @@ struct FTile
 		float CurrentHeight;
 	UPROPERTY()
 		int32 InstanceId;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 		ABuilding* Building = nullptr;
 };
 

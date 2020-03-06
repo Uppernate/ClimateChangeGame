@@ -19,7 +19,7 @@ class CLIMATECHANGEGAME_API ALevelController : public APlayerController
 	GENERATED_BODY()
 public:
 	// Class holding tilemap and tile meshes
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 		AWorldTiles* WorldTiles;
 	// A class that modified the tilemap
 	UPROPERTY()

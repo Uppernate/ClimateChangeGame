@@ -127,6 +127,7 @@ void AWorldTiles::RenderTiles()
 		if (!MeshInstance) continue;
 		//Tile.InstanceId = MeshInstance->AddInstance(FTransform(UGridLibrary::TileIndexToWorldPosition(Elem.Key) + FVector(0, 0, 1) * Tile.CurrentHeight));
 		Tile.InstanceId = MeshInstance->AddTile(Elem.Key, Tile.CurrentHeight);
+		MaxHeight = FMath::Max(MaxHeight, Tile.CurrentHeight);
 	}
 }
 

@@ -77,6 +77,10 @@ void ABuilding::BeginPlay()
 					UBuildingLibrary::DistributionToCurveRange(Distribution.W, Data->ScaleDistribution)));
 			InstancedMeshes[Variant]->AddInstance(InstanceTransform);
 		}
+		for (auto& Elem : Data->Rates)
+		{
+			Rates.Add(Elem.Key, Elem.Value);
+		}
 	}
 }
 

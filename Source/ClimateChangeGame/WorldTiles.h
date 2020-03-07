@@ -26,6 +26,8 @@ public:
 		TMap<FIntVector, FTile> TileMap;
 	UPROPERTY(BlueprintReadOnly)
 		UDataTable* TileTypes;
+	UPROPERTY(BlueprintReadOnly)
+		float MaxHeight = -400.0f;
 
 protected:
 	// Called when the game starts or when spawned

@@ -30,7 +30,11 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		FIntVector AttachedPosition;
 	UPROPERTY(BlueprintReadOnly)
+		float AttachedHeight;
+	UPROPERTY(BlueprintReadOnly)
 		bool IsAttached;
+	UPROPERTY()
+		float LastFloodCheck;
 
 protected:
 	// Called when the game starts or when spawned
@@ -43,4 +47,9 @@ public:
 		bool AttachToPosition(FIntVector Coordinates);
 	UFUNCTION(BlueprintCallable)
 		bool Deattach();
+	UFUNCTION(BlueprintCallable)
+		bool CheckForFlooding();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+		void OnFlooded();
+		void OnFlooded_Implementation();
 };

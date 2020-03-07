@@ -84,7 +84,12 @@ void ABuilding::BeginPlay()
 void ABuilding::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	float CurrentTime = GetWorld()->GetTimeSeconds();
+	if (IsAttached && CurrentTime > LastFloodCheck)
+	{
+		CheckForFlooding();
+		LastFloodCheck = CurrentTime + 1.0f;
+	}
 }
 
 bool ABuilding::AttachToPosition(FIntVector Coordinates)
@@ -100,6 +105,7 @@ bool ABuilding::AttachToPosition(FIntVector Coordinates)
 				Tile->Building = this;
 				SetActorLocation(UGridLibrary::TileIndexToWorldPosition(Coordinates) + FVector(0, 0, Tile->CurrentHeight));
 				AttachedPosition = Coordinates;
+				AttachedHeight = Tile->CurrentHeight;
 				IsAttached = true;
 				for (auto& Elem : Rates)
 				{
@@ -142,5 +148,26 @@ bool ABuilding::Deattach()
 		}
 	}
 	return false;
+}
+
+bool ABuilding::CheckForFlooding()
+{
+	ALevelController* Controller = GetWorld()->GetFirstPlayerController<ALevelController>();
+	if (Controller)
+	{
+		float* WaterLevel = Controller->CurrentValues.Find(ERate::VE_Water);
+		if (WaterLevel && *WaterLevel > AttachedHeight)
+		{
+			OnFlooded();
+			return true;
+		}
+	}
+	return false;
+}
+
+void ABuilding::OnFlooded_Implementation()
+{
+	Deattach();
+	Destroy();
 }
 

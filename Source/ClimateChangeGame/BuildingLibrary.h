@@ -16,6 +16,7 @@ enum class ERate : uint8
 	VE_Heat UMETA(DisplayName = "Heat"),
 	VE_Pollution UMETA(DisplayName = "Pollution"),
 	VE_Energy UMETA(DisplayName = "Energy"),
+	VE_Last UMETA(Hidden)
 };
 
 USTRUCT(BlueprintType)

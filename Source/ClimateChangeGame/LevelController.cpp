@@ -22,3 +22,21 @@ bool ALevelController::GetTileCoordinateCurrentlyHovered(FIntVector& TileCoordin
 	}
 	return false;
 }
+
+void ALevelController::AddRatesToValues(float DeltaTime)
+{
+	for (auto& Elem : Rates)
+	{
+		float* Current = CurrentValues.Find(Elem.Key);
+		CurrentValues.Add(Elem.Key, Current ? *Current + Elem.Value * DeltaTime : Elem.Value * DeltaTime);
+	}
+}
+
+void ALevelController::ZeroCurrentValues()
+{
+	const int32 Max = static_cast<int32>(ERate::VE_Last);
+	for (int32 i = 0; i < Max; i++)
+	{
+		CurrentValues.Add(static_cast<ERate>(i), 0.0f);
+	}
+}

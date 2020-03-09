@@ -27,6 +27,10 @@ public:
 		FString Name;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TMap<ERate, float> Rates;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TMap<ERate, float> Required;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TMap<ERate, float> GainOnDestroy;
 	UPROPERTY(BlueprintReadOnly)
 		FIntVector AttachedPosition;
 	UPROPERTY(BlueprintReadOnly)
@@ -59,4 +63,8 @@ public:
 		FTransform GenerateRandomVariantAndTransform(FBuildingData Data, FVector4 Distribution, int& Variant);
 	UFUNCTION(BlueprintCallable)
 		void AddInstanceTo(int InstancedIndex, FTransform Transform);
+	UFUNCTION(BlueprintCallable)
+		void PayRequirements();
+	UFUNCTION(BlueprintCallable)
+		void CollectDestroyGainAmount();
 };

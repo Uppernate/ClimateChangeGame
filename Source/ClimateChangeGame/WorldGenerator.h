@@ -19,9 +19,13 @@ public:
 	UPROPERTY()
 		UDataTable* TileTypes;
 	UPROPERTY()
+		UDataTable* BuildingTypes;
+	UPROPERTY()
 		ALevelController* Controller;
 	UPROPERTY()
 		int32 MaxSize = 32;
+	UPROPERTY()
+		float TreeChance = 0.08f;
 
 protected:
 	// Called when the game starts or when spawned
@@ -33,4 +37,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void GenerateWorld();
 		void GenerateWorld_Implementation();
+	UFUNCTION()
+		void TreeSpread(FIntVector Position, TSubclassOf<ABuilding> BuildingClass, float Chance);
+	UFUNCTION()
+		void StoneSpread(FIntVector Position, TSubclassOf<ABuilding> BuildingClass, float Chance);
 };

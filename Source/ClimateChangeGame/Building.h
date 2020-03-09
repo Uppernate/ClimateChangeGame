@@ -52,4 +52,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void OnFlooded();
 		void OnFlooded_Implementation();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+		void OnNewInstance(int Index, FBuildingData* Data);
+		void OnNewInstance_Implementation(int Index, FBuildingData* Data);
+	UFUNCTION(BlueprintCallable)
+		void AddInstanceTo(int InstancedIndex, FTransform Transform);
 };

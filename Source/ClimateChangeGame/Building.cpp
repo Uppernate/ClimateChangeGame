@@ -38,11 +38,10 @@ void ABuilding::BeginPlay()
 			}
 			InstancedMeshes[i] = NewMeshInstance;
 		}
-		bool DefaultToZeroVariant = true;
-		if (Data->VariantDistribution)
-			DefaultToZeroVariant = false;
+		bool DefaultToZeroVariant = Data->VariantDistribution ? false : true;
 		for (int32 i = 0; i < Data->InstanceCount; i++)
 		{
+			OnNewInstance(i, Data);
 			float DefaultVal = 1.0f / (Data->InstanceCount + 1) * i + 1.0f / (Data->InstanceCount + 1);
 			FVector4 Distribution = FVector4(DefaultVal, DefaultVal, DefaultVal, DefaultVal);
 			Distribution.X = FMath::Lerp(Distribution.X, FMath::RandRange(0.0f, 1.0f), Data->DistributionRandomness.X);
@@ -173,5 +172,47 @@ void ABuilding::OnFlooded_Implementation()
 {
 	Deattach();
 	Destroy();
+}
+
+void ABuilding::OnNewInstance_Implementation(int Index, FBuildingData* Data)
+{
+	float DefaultVal = 1.0f / (Data->InstanceCount + 1) * Index + 1.0f / (Data->InstanceCount + 1);
+	FVector4 Distribution = FVector4(DefaultVal, DefaultVal, DefaultVal, DefaultVal);
+	Distribution.X = FMath::Lerp(Distribution.X, FMath::RandRange(0.0f, 1.0f), Data->DistributionRandomness.X);
+	Distribution.Y = FMath::Lerp(Distribution.Y, FMath::RandRange(0.0f, 1.0f), Data->DistributionRandomness.Y);
+	Distribution.Z = FMath::Lerp(Distribution.Z, FMath::RandRange(0.0f, 1.0f), Data->DistributionRandomness.Z);
+	Distribution.W = FMath::Lerp(Distribution.W, FMath::RandRange(0.0f, 1.0f), Data->DistributionRandomness.W);
+
+	int32 Variant = 0;
+	FTransform InstanceTransform;
+	if (Data->VariantDistribution)
+	{
+		float ApproxVariant = Data->VariantDistribution->GetFloatValue(
+			UBuildingLibrary::DistributionToCurveRange(Distribution.X, Data->VariantDistribution));
+		int32 ChosenVariant = FMath::RoundToInt(ApproxVariant);
+		// Clamp so result does not go out of array's bounds
+		Variant = FMath::Min(FMath::Max(ChosenVariant, 0), InstancedMeshes.Num());
+
+	}
+	if (Data->LocationDistribution)
+		InstanceTransform.SetLocation(Data->LocationDistribution->GetVectorValue(
+			UBuildingLibrary::DistributionToCurveRange(Distribution.Y, Data->LocationDistribution)));
+	if (Data->RotationDistribution)
+	{
+		FVector RotationVector = Data->RotationDistribution->GetVectorValue(
+			UBuildingLibrary::DistributionToCurveRange(Distribution.Z, Data->RotationDistribution));
+		// TODO: This isn't a proper way to have rotation due to euler rotation being used (gimbal lock, etc.)
+		FRotator Rotation{ RotationVector.Y * 360.0f, RotationVector.Z * 360.0f, RotationVector.X * 360.0f };
+		InstanceTransform.SetRotation(Rotation.Quaternion());
+	}
+	if (Data->ScaleDistribution)
+		InstanceTransform.SetScale3D(Data->ScaleDistribution->GetVectorValue(
+			UBuildingLibrary::DistributionToCurveRange(Distribution.W, Data->ScaleDistribution)));
+	InstancedMeshes[Variant]->AddInstance(InstanceTransform);
+}
+
+void ABuilding::AddInstanceTo(int InstancedIndex, FTransform Transform)
+{
+	
 }
 

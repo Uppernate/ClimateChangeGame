@@ -63,4 +63,10 @@ class CLIMATECHANGEGAME_API UBuildingLibrary : public UBlueprintFunctionLibrary
 public:
 	UFUNCTION()
 		static float DistributionToCurveRange(float Distribution, UCurveBase* Curve);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		static FVector4 GenerateRandomDistribution(int Index, int MaxIndex, FVector4 DistributionRandomness);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		static float GetFloatDistribution(UCurveFloat* Curve, float Distribution);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		static FVector GetVectorDistribution(UCurveVector* Curve, float Distribution);
 };

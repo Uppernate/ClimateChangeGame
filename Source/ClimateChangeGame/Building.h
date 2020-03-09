@@ -53,8 +53,10 @@ public:
 		void OnFlooded();
 		void OnFlooded_Implementation();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-		void OnNewInstance(int Index, FBuildingData* Data);
-		void OnNewInstance_Implementation(int Index, FBuildingData* Data);
+		void OnNewInstance(int Index, FBuildingData Data);
+		void OnNewInstance_Implementation(int Index, FBuildingData Data);
+	UFUNCTION(BlueprintCallable)
+		FTransform GenerateRandomVariantAndTransform(FBuildingData Data, FVector4 Distribution, int& Variant);
 	UFUNCTION(BlueprintCallable)
 		void AddInstanceTo(int InstancedIndex, FTransform Transform);
 };

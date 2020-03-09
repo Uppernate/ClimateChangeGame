@@ -36,9 +36,18 @@ struct FBuildingData : public FTableRowBase
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FString Description;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UMaterialInterface* Icon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TArray<FBuildingVariation> Variations;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TMap<ERate, float> Rates;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TMap<ERate, float> PlaceRequirement;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TMap<ERate, float> DestroyGainAmount;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		int32 InstanceCount = 1;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

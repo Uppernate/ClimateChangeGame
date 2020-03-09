@@ -16,6 +16,9 @@ enum class ERate : uint8
 	VE_Heat UMETA(DisplayName = "Heat"),
 	VE_Pollution UMETA(DisplayName = "Pollution"),
 	VE_Energy UMETA(DisplayName = "Energy"),
+	VE_Wood UMETA(DisplayName = "Wood"),
+	VE_Stone UMETA(DisplayName = "Stone"),
+	VE_Iron UMETA(DisplayName = "Iron"),
 	VE_Last UMETA(Hidden)
 };
 

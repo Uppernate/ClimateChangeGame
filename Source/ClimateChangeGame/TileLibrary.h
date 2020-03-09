@@ -8,6 +8,7 @@
 #include "Engine/StaticMesh.h"
 #include "TileLibrary.generated.h"
 
+class AWorldTiles;
 class ABuilding;
 
 USTRUCT(BlueprintType)
@@ -47,5 +48,7 @@ UCLASS()
 class CLIMATECHANGEGAME_API UTileLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
-	
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		static void GetNeighboursOfTile(AWorldTiles* Tiles, FIntVector Position, TArray<FIntVector>& Neighbours);
 };

@@ -4,6 +4,7 @@
 #include "WorldGenerator.h"
 #include "AssetLoader.h"
 #include "GridLibrary.h"
+#include "Building.h"
 
 // Sets default values
 AWorldGenerator::AWorldGenerator()
@@ -12,6 +13,7 @@ AWorldGenerator::AWorldGenerator()
 	PrimaryActorTick.bCanEverTick = true;
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	LoadAsset<UDataTable>(TEXT("DataTable'/Game/DataTables/DT_TileTypes.DT_TileTypes'"), TileTypes);
+	LoadAsset<UDataTable>(TEXT("DataTable'/Game/DataTables/DT_BuildingTypes.DT_BuildingTypes'"), BuildingTypes);
 }
 
 // Called when the game starts or when spawned
@@ -146,7 +148,53 @@ void AWorldGenerator::GenerateWorld_Implementation()
 			Elem.Value.Name = FString(TEXT("sand"));
 		}
 	}
+
+	// Generate Trees
+
+	static const FString ContextString(TEXT("Getting Tree"));
+	FBuildingData* TreeData = BuildingTypes->FindRow<FBuildingData>(FName(TEXT("tree")), ContextString, true);
+
+	if (TreeData)
+	{
+		for (auto& Elem : Controller->WorldTiles->TileMap)
+		{
+			if (Elem.Value.Name == FString(TEXT("grass")))
+			{
+				if (TreeChance >= FMath::RandRange(0.0f, 1.0f))
+				{
+					ABuilding* Tree = GetWorld()->SpawnActor<ABuilding>(TreeData->BuildingClass);
+					bool Success = Tree->AttachToPosition(Elem.Key);
+					if (!Success)
+						Tree->Destroy();
+					else
+						TreeSpread(Elem.Key, TreeData->BuildingClass);
+				}
+			}
+		}
+	}
 	
 	Controller->WorldTiles->RenderTiles();
+}
+
+void AWorldGenerator::TreeSpread(FIntVector Position, TSubclassOf<ABuilding> BuildingClass)
+{
+	TArray<FIntVector> Neighbours;
+	UTileLibrary::GetNeighboursOfTile(Controller->WorldTiles, Position, Neighbours);
+	for (int32 i = 0; i < Neighbours.Num(); i++)
+	{
+		if (FMath::Lerp(TreeChance, 1.0f, 0.2f) >= FMath::RandRange(0.0f, 1.0f))
+		{
+			FTile* Tile = Controller->WorldTiles->TileMap.Find(Neighbours[i]);
+			if (Tile && Tile->Name == FString(TEXT("grass")) && Tile->CurrentHeight > -400.0f)
+			{
+				ABuilding* Tree = GetWorld()->SpawnActor<ABuilding>(BuildingClass);
+				bool Success = Tree->AttachToPosition(Neighbours[i]);
+				if (!Success)
+					Tree->Destroy();
+				else
+					TreeSpread(Neighbours[i], BuildingClass);
+			}
+		}
+	}
 }
 

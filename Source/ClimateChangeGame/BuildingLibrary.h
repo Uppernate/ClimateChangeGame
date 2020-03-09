@@ -9,6 +9,8 @@
 #include "Curves/CurveVector.h"
 #include "BuildingLibrary.generated.h"
 
+class ABuilding;
+
 UENUM(BlueprintType)
 enum class ERate : uint8
 {
@@ -42,6 +44,8 @@ struct FBuildingData : public FTableRowBase
 		FString Description;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UMaterialInterface* Icon;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TSubclassOf<ABuilding> BuildingClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TArray<FBuildingVariation> Variations;

@@ -118,6 +118,7 @@ void AWorldTiles::RenderTiles()
 				NewMeshInstance->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 				NewMeshInstance->SetRelativeTransform(FTransform());
 				NewMeshInstance->SetStaticMesh(TileType->Mesh);
+				NewMeshInstance->SetCollisionProfileName(TEXT("Gameplay"));
 				//NewMeshInstance->SetMaterial(0, TileType->Material);
 				NewMeshInstance->CreateDynamicMaterialInstance(0, TileType->Material);
 				TypeToId.Add(Tile.Name, TileInstances.Add(NewMeshInstance));

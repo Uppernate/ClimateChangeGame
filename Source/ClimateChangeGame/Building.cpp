@@ -46,6 +46,14 @@ void ABuilding::BeginPlay()
 		{
 			Rates.Add(Elem.Key, Elem.Value);
 		}
+		for (auto& Elem : Data->PlaceRequirement)
+		{
+			Required.Add(Elem.Key, Elem.Value);
+		}
+		for (auto& Elem : Data->DestroyGainAmount)
+		{
+			GainOnDestroy.Add(Elem.Key, Elem.Value);
+		}
 	}
 }
 
@@ -178,5 +186,37 @@ FTransform ABuilding::GenerateRandomVariantAndTransform(FBuildingData Data, FVec
 void ABuilding::AddInstanceTo(int InstancedIndex, FTransform Transform)
 {
 	InstancedMeshes[InstancedIndex]->AddInstance(Transform);
+}
+
+void ABuilding::PayRequirements()
+{
+	ALevelController* Controller = GetWorld()->GetFirstPlayerController<ALevelController>();
+	if (Controller)
+	{
+		for (auto& Elem : Required)
+		{
+			float* CurrentRate = Controller->CurrentValues.Find(Elem.Key);
+			if (CurrentRate)
+				Controller->CurrentValues.Add(Elem.Key, *CurrentRate - Elem.Value);
+			else
+				Controller->CurrentValues.Add(Elem.Key, 0.0f - Elem.Value);
+		}
+	}
+}
+
+void ABuilding::CollectDestroyGainAmount()
+{
+	ALevelController* Controller = GetWorld()->GetFirstPlayerController<ALevelController>();
+	if (Controller)
+	{
+		for (auto& Elem : GainOnDestroy)
+		{
+			float* CurrentRate = Controller->CurrentValues.Find(Elem.Key);
+			if (CurrentRate)
+				Controller->CurrentValues.Add(Elem.Key, *CurrentRate + Elem.Value);
+			else
+				Controller->CurrentValues.Add(Elem.Key, 0.0f + Elem.Value);
+		}
+	}
 }
 

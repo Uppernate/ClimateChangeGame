@@ -25,7 +25,7 @@ public:
 	UPROPERTY()
 		int32 MaxSize = 32;
 	UPROPERTY()
-		float TreeChance = 0.12f;
+		float TreeChance = 0.08f;
 
 protected:
 	// Called when the game starts or when spawned
@@ -38,5 +38,7 @@ public:
 		void GenerateWorld();
 		void GenerateWorld_Implementation();
 	UFUNCTION()
-		void TreeSpread(FIntVector Position, TSubclassOf<ABuilding> BuildingClass);
+		void TreeSpread(FIntVector Position, TSubclassOf<ABuilding> BuildingClass, float Chance);
+	UFUNCTION()
+		void StoneSpread(FIntVector Position, TSubclassOf<ABuilding> BuildingClass, float Chance);
 };

@@ -167,7 +167,31 @@ void AWorldGenerator::GenerateWorld_Implementation()
 					if (!Success)
 						Tree->Destroy();
 					else
-						TreeSpread(Elem.Key, TreeData->BuildingClass);
+						TreeSpread(Elem.Key, TreeData->BuildingClass, FMath::Lerp(TreeChance, 1.0f, 0.6f));
+				}
+			}
+		}
+	}
+
+	// Generate Stone
+
+	static const FString ContextStringStone(TEXT("Getting Stone"));
+	FBuildingData* StoneData = BuildingTypes->FindRow<FBuildingData>(FName(TEXT("stone")), ContextString, true);
+
+	if (StoneData)
+	{
+		for (auto& Elem : Controller->WorldTiles->TileMap)
+		{
+			if (Elem.Value.CurrentHeight >= -400.0f)
+			{
+				if (TreeChance * 0.6f >= FMath::RandRange(0.0f, 1.0f))
+				{
+					ABuilding* Stone = GetWorld()->SpawnActor<ABuilding>(StoneData->BuildingClass);
+					bool Success = Stone->AttachToPosition(Elem.Key);
+					if (!Success)
+						Stone->Destroy();
+					else
+						StoneSpread(Elem.Key, StoneData->BuildingClass, FMath::Lerp(TreeChance * 0.5f, 1.0f, 0.7f));
 				}
 			}
 		}
@@ -176,13 +200,13 @@ void AWorldGenerator::GenerateWorld_Implementation()
 	Controller->WorldTiles->RenderTiles();
 }
 
-void AWorldGenerator::TreeSpread(FIntVector Position, TSubclassOf<ABuilding> BuildingClass)
+void AWorldGenerator::TreeSpread(FIntVector Position, TSubclassOf<ABuilding> BuildingClass, float Chance)
 {
 	TArray<FIntVector> Neighbours;
 	UTileLibrary::GetNeighboursOfTile(Controller->WorldTiles, Position, Neighbours);
 	for (int32 i = 0; i < Neighbours.Num(); i++)
 	{
-		if (FMath::Lerp(TreeChance, 1.0f, 0.2f) >= FMath::RandRange(0.0f, 1.0f))
+		if (Chance >= FMath::RandRange(0.0f, 1.0f))
 		{
 			FTile* Tile = Controller->WorldTiles->TileMap.Find(Neighbours[i]);
 			if (Tile && Tile->Name == FString(TEXT("grass")) && Tile->CurrentHeight > -400.0f)
@@ -192,7 +216,29 @@ void AWorldGenerator::TreeSpread(FIntVector Position, TSubclassOf<ABuilding> Bui
 				if (!Success)
 					Tree->Destroy();
 				else
-					TreeSpread(Neighbours[i], BuildingClass);
+					TreeSpread(Neighbours[i], BuildingClass, Chance * 0.6f);
+			}
+		}
+	}
+}
+
+void AWorldGenerator::StoneSpread(FIntVector Position, TSubclassOf<ABuilding> BuildingClass, float Chance)
+{
+	TArray<FIntVector> Neighbours;
+	UTileLibrary::GetNeighboursOfTile(Controller->WorldTiles, Position, Neighbours);
+	for (int32 i = 0; i < Neighbours.Num(); i++)
+	{
+		if (Chance >= FMath::RandRange(0.0f, 1.0f))
+		{
+			FTile* Tile = Controller->WorldTiles->TileMap.Find(Neighbours[i]);
+			if (Tile && Tile->CurrentHeight > -400.0f)
+			{
+				ABuilding* Stone = GetWorld()->SpawnActor<ABuilding>(BuildingClass);
+				bool Success = Stone->AttachToPosition(Neighbours[i]);
+				if (!Success)
+					Stone->Destroy();
+				else
+					StoneSpread(Neighbours[i], BuildingClass, Chance * 0.5f);
 			}
 		}
 	}

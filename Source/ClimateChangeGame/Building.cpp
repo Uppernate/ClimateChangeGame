@@ -13,7 +13,7 @@ ABuilding::ABuilding()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-	LoadAsset<UDataTable>(TEXT("DataTable'/Game/DataTables/DT_BuildingTypes.DT_BuildingTypes'"), BuildingTypes);
+	//LoadAsset<UDataTable>(TEXT("DataTable'/Game/DataTables/DT_BuildingTypes.DT_BuildingTypes'"), BuildingTypes);
 }
 
 // Called when the game starts or when spawned
@@ -21,13 +21,13 @@ void ABuilding::BeginPlay()
 {
 	Super::BeginPlay();
 	static const FString ContextString(TEXT("Building Begin Play"));
-	FBuildingData* Data =  BuildingTypes->FindRow<FBuildingData>(FName(*Name), ContextString, true);
+	FBuildingData* Data = BuildingTypes->FindRow<FBuildingData>(FName(*Name), ContextString, true);
 	if (Data)
 	{
 		InstancedMeshes.SetNumZeroed(Data->Variations.Num());
 		for (int32 i = 0; i < Data->Variations.Num(); i++)
 		{
-			UInstancedStaticMeshComponent* NewMeshInstance = NewObject<UInstancedStaticMeshComponent>(this);
+			UHierarchicalInstancedStaticMeshComponent* NewMeshInstance = NewObject<UHierarchicalInstancedStaticMeshComponent>(this);
 			NewMeshInstance->RegisterComponent();
 			NewMeshInstance->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 			NewMeshInstance->SetRelativeTransform(FTransform());
@@ -186,6 +186,21 @@ FTransform ABuilding::GenerateRandomVariantAndTransform(FBuildingData Data, FVec
 void ABuilding::AddInstanceTo(int InstancedIndex, FTransform Transform)
 {
 	InstancedMeshes[InstancedIndex]->AddInstance(Transform);
+}
+
+bool ABuilding::CheckRequirementsMet()
+{
+	ALevelController* Controller = GetWorld()->GetFirstPlayerController<ALevelController>();
+	if (Controller)
+	{
+		for (auto& Elem : Required)
+		{
+			float* CurrentRate = Controller->CurrentValues.Find(Elem.Key);
+			if (!CurrentRate || *CurrentRate < Elem.Value)
+				return false;
+		}
+	}
+	return true;
 }
 
 void ABuilding::PayRequirements()

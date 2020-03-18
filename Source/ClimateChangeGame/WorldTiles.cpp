@@ -10,7 +10,7 @@ AWorldTiles::AWorldTiles()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	LoadAsset<UDataTable>(TEXT("DataTable'/Game/DataTables/DT_TileTypes.DT_TileTypes'"), TileTypes);
+	//LoadAsset<UDataTable>(TEXT("DataTable'/Game/DataTables/DT_TileTypes.DT_TileTypes'"), TileTypes);
 }
 
 // Called when the game starts or when spawned

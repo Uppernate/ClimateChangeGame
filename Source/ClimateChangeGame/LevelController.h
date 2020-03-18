@@ -19,8 +19,10 @@ class CLIMATECHANGEGAME_API ALevelController : public APlayerController
 	GENERATED_BODY()
 public:
 	// Class holding tilemap and tile meshes
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TSubclassOf<AWorldTiles> WorldTilesType;
 	UPROPERTY(BlueprintReadOnly)
-		AWorldTiles* WorldTiles;
+		AWorldTiles* WorldTiles = nullptr;
 	// A class that modified the tilemap
 	UPROPERTY()
 		AWorldGenerator* Generator;
@@ -30,10 +32,8 @@ public:
 		TMap<ERate, float> CurrentValues;
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetTileCoordinateCurrentlyHovered(FIntVector& TileCoordinate, float& Height);
-	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UFUNCTION(BlueprintCallable)
 		float GetAverageHeightAroundIndex(FVector Location);
-	UFUNCTION()
-		float InternalGetHeight(FVector& Location, FIntVector Position, float& Amount);
 	UFUNCTION(BlueprintCallable)
 		void AddRatesToValues(float DeltaTime);
 	UFUNCTION(BlueprintCallable)
@@ -41,6 +41,6 @@ public:
 
 	ALevelController();
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UCurveFloat* HeightWeight;
 };

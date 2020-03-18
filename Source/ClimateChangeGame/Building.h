@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Engine/DataTable.h"
+#include "Components/HierarchicalInstancedStaticMeshComponent.h"
 #include "TileLibrary.h"
 #include "BuildingLibrary.h"
 #include "Building.generated.h"
@@ -20,7 +21,7 @@ public:
 	
 	UPROPERTY()
 		TArray<UInstancedStaticMeshComponent*> InstancedMeshes;
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UDataTable* BuildingTypes;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -63,6 +64,8 @@ public:
 		FTransform GenerateRandomVariantAndTransform(FBuildingData Data, FVector4 Distribution, int& Variant);
 	UFUNCTION(BlueprintCallable)
 		void AddInstanceTo(int InstancedIndex, FTransform Transform);
+	UFUNCTION(BlueprintCallable)
+		bool CheckRequirementsMet();
 	UFUNCTION(BlueprintCallable)
 		void PayRequirements();
 	UFUNCTION(BlueprintCallable)

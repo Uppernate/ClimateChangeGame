@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/InstancedStaticMeshComponent.h"
+#include "Components/HierarchicalInstancedStaticMeshComponent.h"
 #include "InstancedTilesComponent.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CLIMATECHANGEGAME_API UInstancedTilesComponent : public UInstancedStaticMeshComponent
+class CLIMATECHANGEGAME_API UInstancedTilesComponent : public UHierarchicalInstancedStaticMeshComponent
 {
 	GENERATED_BODY()
 public:

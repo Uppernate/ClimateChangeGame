@@ -24,7 +24,7 @@ public:
 		TArray<UInstancedTilesComponent*> TileInstances;
 	UPROPERTY(BlueprintReadOnly)
 		TMap<FIntVector, FTile> TileMap;
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UDataTable* TileTypes;
 	UPROPERTY(BlueprintReadOnly)
 		float MaxHeight = -400.0f;

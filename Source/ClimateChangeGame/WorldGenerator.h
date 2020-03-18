@@ -16,14 +16,14 @@ class CLIMATECHANGEGAME_API AWorldGenerator : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AWorldGenerator();
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UDataTable* TileTypes;
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UDataTable* BuildingTypes;
 	UPROPERTY()
 		ALevelController* Controller;
 	UPROPERTY()
-		int32 MaxSize = 32;
+		int32 MaxSize = 18;
 	UPROPERTY()
 		float TreeChance = 0.08f;
 

@@ -12,8 +12,8 @@ AWorldGenerator::AWorldGenerator()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-	LoadAsset<UDataTable>(TEXT("DataTable'/Game/DataTables/DT_TileTypes.DT_TileTypes'"), TileTypes);
-	LoadAsset<UDataTable>(TEXT("DataTable'/Game/DataTables/DT_BuildingTypes.DT_BuildingTypes'"), BuildingTypes);
+	//LoadAsset<UDataTable>(TEXT("DataTable'/Game/DataTables/DT_TileTypes.DT_TileTypes'"), TileTypes);
+	//LoadAsset<UDataTable>(TEXT("DataTable'/Game/DataTables/DT_BuildingTypes.DT_BuildingTypes'"), BuildingTypes);
 }
 
 // Called when the game starts or when spawned
@@ -27,7 +27,7 @@ void AWorldGenerator::BeginPlay()
 		if (Controller)
 		{
 			Controller->Generator = this;
-			Controller->WorldTiles = GetWorld()->SpawnActor<AWorldTiles>();
+			Controller->WorldTiles = GetWorld()->SpawnActor<AWorldTiles>(Controller->WorldTilesType);
 			GenerateWorld();
 		}
 	}
@@ -151,10 +151,20 @@ void AWorldGenerator::GenerateWorld_Implementation()
 
 	// Generate Trees
 
+	if (IsValid(BuildingTypes))
+	{
+		UE_LOG(LogTemp, Display, TEXT("BuildingTypes is good"))
+	}
+	else
+	{
+		UE_LOG(LogTemp, Display, TEXT("BuildingTypes is nullptr"))
+		return;
+	}
+	
 	static const FString ContextString(TEXT("Getting Tree"));
 	FBuildingData* TreeData = BuildingTypes->FindRow<FBuildingData>(FName(TEXT("tree")), ContextString, true);
 
-	if (TreeData)
+	if (TreeData && TreeData->BuildingClass)
 	{
 		for (auto& Elem : Controller->WorldTiles->TileMap)
 		{

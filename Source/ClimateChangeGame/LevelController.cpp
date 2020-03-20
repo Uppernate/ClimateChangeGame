@@ -64,8 +64,36 @@ void ALevelController::AddRatesToValues(float DeltaTime)
 {
 	for (auto& Elem : Rates)
 	{
-		float* Current = CurrentValues.Find(Elem.Key);
-		CurrentValues.Add(Elem.Key, Current ? *Current + Elem.Value * DeltaTime : Elem.Value * DeltaTime);
+		float* FoundValue = CurrentValues.Find(Elem.Key);
+		float Value = 0.0f;
+		float RealRate = Elem.Value;
+		FValueRules* Rule = ValueRules.Find(Elem.Key);
+		if (FoundValue)
+			Value = *FoundValue;
+		else if (Rule)
+		{
+			Value = Rule->DefaultValue;
+		}
+		if (Rule)
+		{
+			if (!Rule->CanHaveNegativeRates)
+				RealRate = FMath::Max(0.0f, RealRate);
+			if (Rule->MaximumRate > Rule->MinimumRate)
+			{
+				RealRate = FMath::Max(Rule->MinimumRate, RealRate);
+				RealRate = FMath::Min(Rule->MaximumRate, RealRate);
+			}
+			Value += RealRate * DeltaTime;
+			if (Rule->MaximumValue > Rule->MinimumValue)
+			{
+				Value = FMath::Max(Rule->MinimumValue, Value);
+				Value = FMath::Min(Rule->MaximumValue, Value);
+			}
+			CurrentValues.Add(Elem.Key, Value);
+			
+		}
+		else
+			CurrentValues.Add(Elem.Key, Value + Elem.Value * DeltaTime);
 	}
 }
 
@@ -75,5 +103,9 @@ void ALevelController::ZeroCurrentValues()
 	for (int32 i = 0; i < Max; i++)
 	{
 		CurrentValues.Add(static_cast<ERate>(i), 0.0f);
+	}
+	for (auto& Elem : ValueRules)
+	{
+		CurrentValues.Add(Elem.Key, Elem.Value.DefaultValue);
 	}
 }

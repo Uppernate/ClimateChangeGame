@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "WorldTiles.h"
 #include "BuildingLibrary.h"
+#include "ValuesLibrary.h"
 #include "LevelController.generated.h"
 
 class AWorldGenerator;
@@ -30,6 +31,8 @@ public:
 		TMap<ERate, float> Rates;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TMap<ERate, float> CurrentValues;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TMap<ERate, FValueRules> ValueRules;
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetTileCoordinateCurrentlyHovered(FIntVector& TileCoordinate, float& Height);
 	UFUNCTION(BlueprintCallable)
